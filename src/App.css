@@ -9,7 +9,7 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 20vh;
+  min-height: 3em;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,8 +23,58 @@
 }
 
 .lary-todo {
-  max-width: 480px;
+  max-width: 360px;
   background: lightblue;
+  padding: 0.5em;
+  margin: 0.5em;
+}
+h1,
+h5,
+ul,
+li {
+  margin: 0;
+  padding: 0;
+}
+.todo-list {
+}
+.todo-list li {
+  display: flex;
+  align-items: center;
+  line-height: 2em;
+  color: #333;
+  cursor: pointer;
+}
+.todo-list li:hover {
+  color: #000;
+}
+.todo-list li > span.content {
+  flex: 1;
+  text-align: left;
+  padding: 0 1em;
+  margin-right: 1em;
+}
+.todo-list li > span.actions {
+  display: none;
+  cursor: pointer;
+  color: gray;
+  background: lightgray;
+  border-radius: 3px;
+}
+.todo-list li:hover > span.actions {
+  display: inline;
+}
+.todo-list li > span.actions i.delete {
+  padding: 0.3em 0.5em;
+  background: lightcoral;
+  border-radius: 50%;
+}
+
+.lary-todo form {
+  padding: 1em 0 0.5em;
+}
+.tip-text {
+  font-size: 0.6em;
+  color: darkgoldenrod;
 }
 
 @keyframes App-logo-spin {

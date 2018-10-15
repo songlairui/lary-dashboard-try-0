@@ -1,12 +1,28 @@
 import React, { Component } from 'react'
 import './App.css'
+import * as utils from './utils/presist-todo'
+
+const tipText = "What's the next?"
 
 class TodoList extends Component {
   render() {
     return (
-      <ul>
+      <ul className="todo-list">
         {this.props.items.map(item => (
-          <li key={item.id}>{item.text}</li>
+          <li key={item.id}>
+            <span className="content">
+              <h5 className="title">{item.text}</h5>
+              {item.description && <p>{item.description}</p>}
+            </span>
+            <span className="actions">
+              <i
+                className="delete"
+                onClick={this.props.delete.bind(null, item.id)}
+              >
+                x
+              </i>
+            </span>
+          </li>
         ))}
       </ul>
     )
@@ -20,7 +36,7 @@ class App extends Component {
       items: [],
       text: ''
     }
-    ;['handleChange', 'handleSubmit'].forEach(m => {
+    ;['handleChange', 'handleSubmit', 'handleDelete'].forEach(m => {
       this[m] = this[m].bind(this)
     })
   }
@@ -42,12 +58,30 @@ class App extends Component {
       text: ''
     }))
   }
+  handleDelete(id) {
+    const toDelete = this.state.items.find(item => item.id === id)
+    const text = toDelete ? toDelete.text : this.state.text
+    this.setState(state => ({
+      items: state.items.filter(item => item.id !== id),
+      text
+    }))
+  }
+  componentWillMount() {
+    const todo = utils.loadTodo()
+    if (todo) {
+      this.setState({ ...this.state, ...todo })
+    }
+  }
+  componentDidUpdate() {
+    const todo = { items: this.state.items, text: this.state.text }
+    utils.saveTodo(todo)
+  }
   render() {
     return (
       <div className="App">
         <header className="App-header">
           <p>
-            Edit <code>src/App.js</code> and save to reload.
+            Lary's <code>Dashboard</code> React.
           </p>
           <a
             className="App-link"
@@ -61,13 +95,18 @@ class App extends Component {
         <main>
           <div className="lary-todo">
             <h3>TODO</h3>
-            <TodoList items={this.state.items} />
+            <TodoList items={this.state.items} delete={this.handleDelete} />
             <form onSubmit={this.handleSubmit}>
-              <label htmlFor="new-todo">next to be done</label>
+              {this.state.text && (
+                <label className="tip-text" htmlFor="new-todo">
+                  {tipText}
+                </label>
+              )}
               <input
                 id="new-todo"
                 onChange={this.handleChange}
                 value={this.state.text}
+                placeholder={tipText}
               />
               <button>Add #{this.state.items.length + 1}</button>
             </form>
